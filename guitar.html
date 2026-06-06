@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Radio Player - Guitar Edition</title>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="guitar.css">
+</head>
+<body class="guitar-stage">
+
+    <article class="guitar-player">
+        
+        <!-- Cuerpo de madera de la guitarra (Sunburst) -->
+        <div class="guitar-body">
+            
+            <!-- Logo pegado como una calcomanía en la madera -->
+            <img src="./hits.png" alt="Logo" class="guitar-logo" onerror="this.style.display='none'">
+            
+            <div id="statusText" class="guitar-status">OFFLINE</div>
+            
+            <!-- Botón de Modo Edición Visual -->
+            <button id="editModeBtn" class="edit-mode-btn"><i class="bi bi-arrows-move"></i> Modo Edición</button>
+
+            <!-- Contenedor del Vúmetro Transparente 1 -->
+            <div id="dragVumeter1" class="guitar-pickup-transparent draggable-item" style="top: 30%; left: 40%; transform: rotate(-10deg); width: 300px; height: 100px;" data-spacing-left="12" data-spacing-right="12" data-vibr-force="2">
+                <canvas id="vumeter1" class="pickup-vumeter"></canvas>
+            </div>
+            <!-- Contenedor del Vúmetro Transparente 2 -->
+            <div id="dragVumeter2" class="guitar-pickup-transparent draggable-item" style="top: 40%; left: 40%; transform: rotate(-10deg); width: 300px; height: 100px;" data-spacing-left="12" data-spacing-right="12" data-vibr-force="2">
+                <canvas id="vumeter2" class="pickup-vumeter"></canvas>
+            </div>
+            <!-- Contenedor del Vúmetro Transparente 3 -->
+            <div id="dragVumeter3" class="guitar-pickup-transparent draggable-item" style="top: 50%; left: 40%; transform: rotate(-10deg); width: 300px; height: 100px;" data-spacing-left="12" data-spacing-right="12" data-vibr-force="2">
+                <canvas id="vumeter3" class="pickup-vumeter"></canvas>
+            </div>
+
+            <!-- Botón Power -->
+            <button id="playSwitch" class="absolute-power-btn draggable-item" style="top: 55%; left: 20%;">
+                <span class="control-label text-neon">INICIAR</span>
+                <i class="bi bi-power"></i>
+            </button>
+
+            <!-- Potenciómetro interactivo sobre la perilla original de la guitarra -->
+            <div id="dragVol" class="absolute-vol-knob draggable-item" style="bottom: 20%; right: 35%;">
+                <span class="control-label text-neon">VOLUMEN</span>
+                <div class="pot-knob-container glow-neon">
+                    <div id="volKnob" class="potentiometer-knob"></div>
+                    <input type="range" id="volSlider" class="invisible-slider" min="0" max="1" step="0.01" value="0.9">
+                </div>
+            </div>
+
+            <!-- Redes sociales incrustadas en el cuerpo -->
+            <div id="dragSocials" class="guitar-socials draggable-item" style="top: 15%; left: 75%;">
+                <a href="http://www.facebook.com/tu facebook" target="_blank" class="social-btn"><i class="bi bi-facebook"></i></a>
+                <a href="http://www.twitter.com/tu twitter" target="_blank" class="social-btn"><i class="bi bi-twitter"></i></a>
+                <a href="mailto:tu correo electronico" class="social-btn"><i class="bi bi-envelope-fill"></i></a>
+            </div>
+
+        </div>
+
+        <!-- Reproductor de Audio Oculto -->
+    <audio id="audioElement">
+        <source src="https://stream.zeno.fm/k9ksf0kn2nhvv" type="audio/mpeg">
+    </audio>
+    </article>
+
+    <!-- Panel de código para exportar las posiciones -->
+    <div id="exportPanel" class="export-panel" style="display: none;">
+        
+        <!-- Selector de Vúmetro Activo -->
+        <div style="margin-bottom: 20px; border-bottom: 1px dashed #0f0; padding-bottom: 15px; text-align: center;">
+            <label style="font-weight: bold; font-size: 14px; margin-right: 15px;">Selecciona para Editar:</label>
+            <input type="radio" id="selectVum1" name="activeVumeter" value="1" checked> <label for="selectVum1" style="cursor: pointer;">Vúmetro 1</label>
+            <input type="radio" id="selectVum2" name="activeVumeter" value="2" style="margin-left: 10px;"> <label for="selectVum2" style="cursor: pointer;">Vúmetro 2</label>
+            <input type="radio" id="selectVum3" name="activeVumeter" value="3" style="margin-left: 10px;"> <label for="selectVum3" style="cursor: pointer;">Vúmetro 3</label>
+        </div>
+
+        <!-- Controles del vúmetro integrados -->
+        <div style="display: flex; flex-wrap: wrap; gap: 20px; margin-bottom: 20px; border-bottom: 1px dashed #0f0; padding-bottom: 15px;">
+            <div class="utility-item">
+                <label>Largo Cuerdas</label>
+                <input type="range" id="widthSlider" min="50" max="800" step="5" value="300">
+            </div>
+            <div class="utility-item">
+                <label>Separación Izq.</label>
+                <input type="range" id="spacingLeftSlider" min="1" max="60" step="1" value="12">
+            </div>
+            <div class="utility-item">
+                <label>Separación Der.</label>
+                <input type="range" id="spacingRightSlider" min="1" max="60" step="1" value="12">
+            </div>
+            <div class="utility-item">
+                <label>Fuerza Vibración</label>
+                <input type="range" id="heightSlider" min="0.1" max="10" step="0.1" value="2">
+            </div>
+            <div class="utility-item">
+                <label>Ángulo Vúmetro</label>
+                <input type="range" id="rotateSlider" min="-180" max="180" step="1" value="-10">
+            </div>
+            <div class="utility-item">
+                <label>Tamaño Texto</label>
+                <input type="range" id="textSizeSlider" min="8" max="40" step="1" value="14">
+            </div>
+        </div>
+
+        <!-- URL del Stream -->
+        <div style="margin-bottom: 20px; border-bottom: 1px dashed #0f0; padding-bottom: 15px;">
+            <label style="display: block; margin-bottom: 6px; font-weight: bold; font-size: 14px;">URL del Stream</label>
+            <div style="display: flex; gap: 8px;">
+                <input type="text" id="streamUrlInput" placeholder="https://stream.zeno.fm/..." value="https://stream.zeno.fm/mfer4shs398uv"
+                    style="flex: 1; background: #111; color: #0f0; border: 1px solid #0f0; padding: 6px 10px; font-family: monospace; font-size: 12px; border-radius: 4px; outline: none;">
+                <button id="applyStreamUrl" style="background: #0f0; color: #000; border: none; padding: 6px 12px; font-weight: bold; cursor: pointer; border-radius: 4px; font-size: 12px;">Aplicar</button>
+            </div>
+            <span id="streamStatus" style="font-size: 11px; opacity: 0.7; display: block; margin-top: 4px;">URL guardada en el navegador.</span>
+        </div>
+
+        <p style="margin-top: 0;">Copia estas posiciones a tu HTML:</p>
+        <pre id="exportCode"></pre>
+        <button id="closeExport" style="margin-top: 10px; padding: 5px 10px; cursor: pointer;">Cerrar Modo Edición</button>
+    </div>
+
+    <script src="guitar.js"></script>
+</body>
+</html>
