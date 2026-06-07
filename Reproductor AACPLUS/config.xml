@@ -1,0 +1,14 @@
+<?xml version="1.0" standalone="yes"?>
+<aacplayer>
+ <station>PrimiciaMundial-Streaming</station>
+ <caption>Tu Radio Aquí</caption> <!--- el nombre de tu radio -->
+ <statusscriptlink>listeners.php</statusscriptlink> <!---  les recomiendo borrar listeners.php-->
+ <facebooklink>http://www.facebook.com/tu facebook</facebooklink>
+ <twitterlink>http://www.twitter.com/tu twitter</twitterlink>
+ <emaillink>mailto:tu correo electronico</emaillink>
+ <autoplay>yes</autoplay>
+ <rtmp>rtmp://176.31.129.52:1935/shoutcast</rtmp>
+ <streamaddress>http://servistream.pe:7202/</streamaddress> <!--- cambia por la url de tu radio -->
+</aacplayer>
+
+

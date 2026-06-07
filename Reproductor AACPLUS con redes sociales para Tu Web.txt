@@ -1,0 +1,23 @@
+Reproductor AACPLUS con redes sociales para Tu Web
+
+Aquí les traigo un reproductor en flash player de perustream, es soportado en todos los navegadores web como IE, mozilla, Google Crome, Safari y otros y en diferentes sistemas operativos como linux, mac, windows y puede usarse para shoutcast para transmisiones en mp3 Online y AaacPlus V2 sin costo alguno (FREE) NO editable para que lo agregue a tu sitio web, permitiendo asi que sus oyentes disfruten de la calidad del formato HD – AACPlus que permite reproducir su streaming de alta calidad sin necesidad de instalar ningun plugin y/o programa adicional.
+
+Configurar el config.xml
+
+
+<?xml version="1.0" standalone="yes"?>
+<aacplayer>
+ <station>PrimiciaMundial-Streaming</station>
+ <caption>PrimiciaMundial-Streaming</caption> <!--- el nombre de tu radio -->
+ <statusscriptlink>listeners.php</statusscriptlink> <!---  les recomiendo borrar listeners.php-->
+ <facebooklink>http://www.facebook.com/tu facebook</facebooklink>
+ <twitterlink>http://www.twitter.com/tu twitter</twitterlink>
+ <emaillink>mailto:tu correo electronico</emaillink>
+ <autoplay>yes</autoplay>
+ <rtmp>rtmp://176.31.129.52:1935/shoutcast</rtmp> <!--- modificar si es necesario -->
+ <streamaddress>http://servistream.pe:7202/</streamaddress> <!--- cambia por la url de tu radio -->
+</aacplayer>
+
+Referencias del Reproductor
+Flash: No Editable
+Audor del Reproductor: Perustream

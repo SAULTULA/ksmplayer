@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Radio Player</title>
+    <!-- Usamos una fuente similar a la del reloj -->
+    <link href="https://fonts.googleapis.com/css2?family=Segoe+UI&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="radio.css">
+</head>
+<body class="radio-body">
+
+    <article class="aac-player">
+        <!-- Fondo SVG que simula la forma de guitarra (Gris sobre Verde) -->
+        <svg class="aac-player__background-svg" viewBox="0 0 358 240" preserveAspectRatio="none">
+            <defs>
+                <linearGradient id="greenGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#4a530e" />
+                    <stop offset="50%" stop-color="#b4c219" />
+                    <stop offset="100%" stop-color="#2a2a10" />
+                </linearGradient>
+                <linearGradient id="grayGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stop-color="#5a5a5a" />
+                    <stop offset="100%" stop-color="#0a0a0a" />
+                </linearGradient>
+                <filter id="glow">
+                    <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+            </defs>
+            <!-- Fondo Verde/Amarillo -->
+            <rect width="358" height="240" fill="url(#greenGrad)" />
+            
+            <!-- Forma de Guitarra (Gris) -->
+            <path d="M 0,60 
+                     C 100,90 150,15 358,15
+                     L 358,240
+                     L 260,240
+                     C 230,240 210,165 180,165
+                     C 150,165 130,240 100,240
+                     L 0,240 Z" 
+                  fill="url(#grayGrad)" stroke="#b4c219" stroke-width="2" filter="url(#glow)" />
+        </svg>
+
+        <div class="aac-player__content">
+            <header class="aac-player__header">
+                <div class="aac-player__logo-container">
+                    <img src="./hits.png" alt="Logo" class="aac-player__logo" onerror="this.style.display='none'">
+                </div>
+                <div class="aac-player__status" id="statusText">OFFLINE</div>
+            </header>
+
+            <canvas id="vumeter" class="aac-player__center-line"></canvas>
+
+            <aside class="aac-player__social">
+                <a href="http://www.facebook.com/tu facebook" target="_blank" class="aac-player__social-btn aac-player__social-btn--fb"><i class="bi bi-facebook"></i></a>
+                <a href="http://www.twitter.com/tu twitter" target="_blank" class="aac-player__social-btn aac-player__social-btn--tw"><i class="bi bi-twitter"></i></a>
+                <a href="mailto:tu correo electronico" class="aac-player__social-btn aac-player__social-btn--em"><i class="bi bi-envelope"></i></a>
+            </aside>
+
+            <footer class="aac-player__footer">
+                <div class="aac-player__bottom-left">
+                    <div class="aac-player__clock" id="clock">00: 00: 00</div>
+                    <div class="aac-player__controls">
+                        <button class="aac-player__btn" id="playBtn"><i class="bi bi-play-fill"></i></button>
+                        <button class="aac-player__btn" id="stopBtn"><i class="bi bi-stop-fill"></i></button>
+                    </div>
+                </div>
+
+                <div class="aac-player__volume-box">
+                    <div class="aac-player__knob-container">
+                        <div class="aac-player__knob" id="knob">
+                            <div class="aac-player__knob-mark"></div>
+                        </div>
+                        <input type="range" id="volumeSlider" class="aac-player__volume-slider" min="0" max="1" step="0.01" value="0.9">
+                    </div>
+                    <div class="aac-player__volume-text">Volume<br><span id="volValue">0.9</span></div>
+                </div>
+            </footer>
+        </div>
+
+        <audio id="audioElement" preload="auto">
+            <source src="https://stream.zeno.fm/k9ksf0kn2nhvv" type="audio/mpeg">
+            <source src="https://stream.zeno.fm/k9ksf0kn2nhvv" type="audio/aac">
+        </audio>
+    </article>
+
+    <script src="radio.js"></script>
+</body>
+</html>

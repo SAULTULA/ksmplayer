@@ -290,25 +290,31 @@ document.addEventListener('DOMContentLoaded', () => {
         stationLogoImg.src = logoFromParam;
     }
 
-    applyStreamUrl.addEventListener('click', () => {
-        const newUrl = streamUrlInput.value.trim();
-        if (newUrl) {
-            localStorage.setItem('radioStreamUrl', newUrl);
-            window.currentStreamUrl = newUrl;
-            
-            streamStatusSpan.textContent = '¡URL Guardada! (Aplica al Iniciar)';
-            streamStatusSpan.style.color = '#fff';
-            
-            if (isPlaying) toggleAudio(); // Apagar si estaba sonando
-            
-            setTimeout(() => {
-                streamStatusSpan.textContent = 'URL guardada en el navegador.';
-                streamStatusSpan.style.color = '';
-            }, 3000);
-            
-            if (isEditMode && typeof updateExportCode === 'function') updateExportCode();
-        }
-    });
+    if (applyStreamUrl) {
+        applyStreamUrl.addEventListener('click', () => {
+            const newUrl = streamUrlInput.value.trim();
+            if (newUrl) {
+                localStorage.setItem('radioStreamUrl', newUrl);
+                window.currentStreamUrl = newUrl;
+                
+                if(streamStatusSpan) {
+                    streamStatusSpan.textContent = '¡URL Guardada! (Aplica al Iniciar)';
+                    streamStatusSpan.style.color = '#fff';
+                }
+                
+                if (isPlaying) toggleAudio(); // Apagar si estaba sonando
+                
+                if(streamStatusSpan) {
+                    setTimeout(() => {
+                        streamStatusSpan.textContent = 'URL guardada en el navegador.';
+                        streamStatusSpan.style.color = '';
+                    }, 3000);
+                }
+                
+                if (isEditMode && typeof updateExportCode === 'function') updateExportCode();
+            }
+        });
+    }
 
     // Elementos arrastrables
     const draggables = [
@@ -322,6 +328,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Cargar posiciones previas guardadas en el navegador
     draggables.forEach(item => {
+        if (!item.el) return;
         const savedPos = localStorage.getItem('pos_' + item.el.id);
         if (savedPos) {
             const { top, left } = JSON.parse(savedPos);
@@ -333,49 +340,85 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     const updateExportCode = () => {
+        if (!exportCode) return;
         let code = '';
-        draggables.forEach(item => {
-            let styleStr = `top: ${item.el.style.top}; left: ${item.el.style.left};`;
-            if (item.el.id.startsWith('dragVumeter')) {
-                if (item.el.style.transform) styleStr += ` transform: ${item.el.style.transform};`;
-                if (item.el.style.width) styleStr += ` width: ${item.el.style.width};`;
-                if (item.el.style.height) styleStr += ` height: ${item.el.style.height};`;
-                
-                const sl = item.el.getAttribute('data-spacing-left');
-                const sr = item.el.getAttribute('data-spacing-right');
-                const vf = item.el.getAttribute('data-vibr-force');
-                code += `<!-- ${item.name} -->\nstyle="${styleStr}"\ndata-spacing-left="${sl}" data-spacing-right="${sr}" data-vibr-force="${vf}"\n\n`;
+
+        // 1. Vúmetros
+        for (let i=1; i<=3; i++) {
+            const el = document.getElementById('dragVumeter' + i);
+            if (!el) continue;
+            const styleStr = `top: ${el.style.top}; left: ${el.style.left}; transform: ${el.style.transform || 'rotate(-10deg)'}; width: ${el.style.width || '300px'}; height: ${el.style.height || '100px'};`;
+            code += `<!-- Contenedor del Vúmetro Transparente ${i} -->\n`;
+            code += `<div id="dragVumeter${i}" class="guitar-pickup-transparent" style="${styleStr}" data-spacing-left="${el.dataset.spacingLeft}" data-spacing-right="${el.dataset.spacingRight}" data-vibr-force="${el.dataset.vibrForce}">\n`;
+            code += `    <canvas id="vumeter${i}" class="pickup-vumeter"></canvas>\n`;
+            code += `</div>\n\n`;
+        }
+
+        // 2. Botón Iniciar
+        const playBtn = document.getElementById('playSwitch');
+        if (playBtn) {
+            code += `<!-- Botón Power -->\n`;
+            code += `<button id="playSwitch" class="absolute-power-btn" style="top: ${playBtn.style.top}; left: ${playBtn.style.left};">\n`;
+            code += `    <span class="control-label text-neon">INICIAR</span>\n`;
+            code += `    <i class="bi bi-power"></i>\n`;
+            code += `</button>\n\n`;
+        }
+
+        // 3. Volumen
+        const volBtn = document.getElementById('dragVol');
+        if (volBtn) {
+            // Manejar si usa bottom/right original o top/left de arrastre
+            let posStyle = '';
+            if (volBtn.style.top && volBtn.style.top !== 'auto') {
+                posStyle = `top: ${volBtn.style.top}; left: ${volBtn.style.left};`;
             } else {
-                if (item.el.style.fontSize) {
-                    styleStr += ` font-size: ${item.el.style.fontSize};`;
-                }
-                code += `<!-- ${item.name} -->\nstyle="${styleStr}"\n\n`;
+                posStyle = `bottom: ${volBtn.style.bottom}; right: ${volBtn.style.right};`;
             }
-        });
-        
-        // Exportar también la etiqueta de audio con la URL actual
-        const finalUrl = streamFromParam ? 'https://TU_RADIO.com/stream' : (streamUrlInput.value || 'https://stream.zeno.fm/mfer4shs398uv');
-        code += `<!-- Etiqueta de Audio -->\n`;
-        code += `<audio id="audioElement">\n  <source src="${finalUrl}" type="audio/mpeg">\n</audio>\n`;
-        
+
+            code += `<!-- Potenciómetro interactivo sobre la perilla original de la guitarra -->\n`;
+            code += `<div id="dragVol" class="absolute-vol-knob" style="${posStyle}">\n`;
+            code += `    <span class="control-label text-neon">VOLUMEN</span>\n`;
+            code += `    <div class="pot-knob-container glow-neon">\n`;
+            code += `        <div id="volKnob" class="potentiometer-knob"></div>\n`;
+            code += `        <input type="range" id="volSlider" class="invisible-slider" min="0" max="1" step="0.01" value="0.9">\n`;
+            code += `    </div>\n`;
+            code += `</div>\n\n`;
+        }
+
+        // 4. Redes Sociales
+        const socBtn = document.getElementById('dragSocials');
+        if (socBtn) {
+            code += `<!-- Redes sociales incrustadas en el cuerpo -->\n`;
+            code += `<div id="dragSocials" class="guitar-socials" style="top: ${socBtn.style.top}; left: ${socBtn.style.left};">\n`;
+            code += `    <a href="http://www.facebook.com/tu_facebook" target="_blank" class="social-btn"><i class="bi bi-facebook"></i></a>\n`;
+            code += `    <a href="http://www.twitter.com/tu_twitter" target="_blank" class="social-btn"><i class="bi bi-twitter"></i></a>\n`;
+            code += `    <a href="mailto:tu_correo_electronico" class="social-btn"><i class="bi bi-envelope-fill"></i></a>\n`;
+            code += `</div>\n`;
+        }
+
         exportCode.textContent = code;
     };
 
-    editModeBtn.addEventListener('click', () => {
-        isEditMode = true;
-        guitarBody.classList.add('edit-mode-active');
-        exportPanel.style.display = 'block';
-        updateExportCode();
-    });
+    if (editModeBtn) {
+        editModeBtn.addEventListener('click', () => {
+            isEditMode = true;
+            if (guitarBody) guitarBody.classList.add('edit-mode-active');
+            if (exportPanel) exportPanel.style.display = 'block';
+            updateExportCode();
+        });
+    }
 
-    closeExport.addEventListener('click', () => {
-        isEditMode = false;
-        guitarBody.classList.remove('edit-mode-active');
-        exportPanel.style.display = 'none';
-    });
+    if (closeExport) {
+        closeExport.addEventListener('click', () => {
+            isEditMode = false;
+            if (guitarBody) guitarBody.classList.remove('edit-mode-active');
+            if (exportPanel) exportPanel.style.display = 'none';
+        });
+    }
 
     // Lógica Drag and Drop
     draggables.forEach(item => {
+        if (!item.el) return;
         let isDragging = false;
         let startX, startY, initialLeft, initialTop;
 

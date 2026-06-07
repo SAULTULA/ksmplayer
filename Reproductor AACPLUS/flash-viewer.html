@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Emulador Flash (Ruffle) - Reproductor Antiguo</title>
+    <style>
+        body {
+            background-color: #000000;
+            color: white;
+            font-family: sans-serif;
+            text-align: center;
+            padding-top: 50px;
+        }
+        #flash-container {
+            width: 358px;
+            height: 240px;
+            margin: 0 auto;
+            border: 2px dashed #555;
+        }
+    </style>
+</head>
+<body>
+    <h2>Vista previa del reproductor antiguo</h2>
+    <p>Usando el emulador Ruffle para renderizar el archivo aacplayer.swf original.</p>
+    
+    <div id="flash-container"></div>
+
+    <!-- Script oficial de Ruffle (Emulador de Flash en Web) -->
+    <script src="https://unpkg.com/@ruffle-rs/ruffle"></script>
+    <script>
+        window.RufflePlayer = window.RufflePlayer || {};
+        window.addEventListener("load", (event) => {
+            const ruffle = window.RufflePlayer.newest();
+            const player = ruffle.createPlayer();
+            const container = document.getElementById("flash-container");
+            container.appendChild(player);
+            
+            // Cargar el swf antiguo respetando el tamaño del index original (358x240)
+            player.load({
+                url: "aacplayer.swf",
+                width: 358,
+                height: 240,
+                allowScriptAccess: true
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,249 @@
+/* radio.css - Diseño idéntico al antiguo reproductor AAC Flash pero en CSS moderno */
+
+:root {
+  --player-bg: linear-gradient(180deg, #4d4d4d 0%, #151515 100%);
+  --player-width: 358px;
+  --player-height: 240px;
+  --text-color: #ffffff;
+  --wave-color: #b4c219;
+  --btn-bg: linear-gradient(180deg, #555555 0%, #111111 100%);
+}
+
+.radio-body {
+  background-color: #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.aac-player {
+  position: relative;
+  width: var(--player-width);
+  height: var(--player-height);
+  background: var(--player-bg);
+  border-radius: 8px;
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.8), 0 5px 15px rgba(0,0,0,0.5);
+  overflow: hidden;
+  border: 1px solid #222;
+}
+
+/* Fondo SVG con las curvas exactas */
+.aac-player__background-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.aac-player__content {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+}
+
+.aac-player__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 15px 20px;
+  height: 60px;
+}
+
+.aac-player__logo-container {
+  width: 140px;
+  height: 40px;
+}
+
+.aac-player__logo {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  border-radius: 4px;
+  mix-blend-mode: multiply; /* Ayuda a que el fondo blanco del JPG se fusione con el verde */
+}
+
+.aac-player__status {
+  color: var(--text-color);
+  font-size: 16px;
+  letter-spacing: 1px;
+  text-shadow: 0 1px 2px #000;
+}
+
+.aac-player__center-line {
+  position: absolute;
+  top: 52%;
+  left: 20px;
+  width: calc(100% - 65px); /* Llega justo hasta la botonera social */
+  height: 60px;
+  transform: translateY(-50%);
+  background: transparent;
+  pointer-events: none;
+}
+
+.aac-player__social {
+  position: absolute;
+  right: 0;
+  top: 45%;
+  background: rgba(100, 100, 100, 0.4);
+  border-radius: 8px 0 0 8px;
+  padding: 8px 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  box-shadow: inset 1px 1px 3px rgba(255,255,255,0.2), -2px 0 5px rgba(0,0,0,0.5);
+  transform: translateY(-50%);
+}
+
+.aac-player__social-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 24px;
+  height: 24px;
+  color: white;
+  text-decoration: none;
+  font-size: 14px;
+  border-radius: 3px;
+  box-shadow: inset 0 1px 1px rgba(255,255,255,0.4), 0 1px 2px rgba(0,0,0,0.6);
+}
+
+.aac-player__social-btn--fb { background: linear-gradient(180deg, #5b7ab4, #3b5998); }
+.aac-player__social-btn--tw { background: linear-gradient(180deg, #6fd5f5, #1da1f2); }
+.aac-player__social-btn--em { background: linear-gradient(180deg, #66b2ff, #0073e6); }
+
+.aac-player__social-btn:active {
+  box-shadow: inset 0 2px 5px rgba(0,0,0,0.5);
+}
+
+.aac-player__footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 80px;
+  pointer-events: none;
+}
+
+.aac-player__bottom-left {
+  position: absolute;
+  bottom: 12px;
+  left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  pointer-events: auto;
+}
+
+.aac-player__clock {
+  color: var(--text-color);
+  font-size: 15px;
+  letter-spacing: 1px;
+  text-shadow: 0 1px 3px #000;
+  margin-left: 2px;
+}
+
+.aac-player__controls {
+  display: flex;
+  gap: 10px;
+}
+
+.aac-player__btn {
+  width: 32px;
+  height: 28px;
+  background: var(--btn-bg);
+  border: 1px solid #111;
+  border-radius: 4px;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  box-shadow: inset 0 1px 2px rgba(255,255,255,0.2), 0 2px 4px rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.aac-player__btn:active {
+  background: #111;
+  box-shadow: inset 0 2px 5px rgba(0,0,0,0.8);
+}
+
+.aac-player__volume-box {
+  position: absolute;
+  bottom: 8px;
+  right: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  pointer-events: auto;
+}
+
+.aac-player__knob-container {
+  position: relative;
+  width: 42px;
+  height: 42px;
+}
+
+.aac-player__knob {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #555, #111);
+  box-shadow: 0 3px 5px rgba(0,0,0,0.8), inset 0 1px 2px rgba(255,255,255,0.2);
+  position: relative;
+  transform: rotate(45deg); /* Default 0.9 position approx */
+  pointer-events: none; /* Let the invisible slider handle clicks */
+}
+
+/* Las marcas de volumen alrededor del knob */
+.aac-player__knob::before {
+  content: "";
+  position: absolute;
+  top: -8px; left: -8px; right: -8px; bottom: -8px;
+  border-radius: 50%;
+  border: 1px dashed rgba(255,255,255,0.3);
+  z-index: -1;
+}
+
+.aac-player__knob-mark {
+  position: absolute;
+  top: 5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 2px;
+  height: 10px;
+  background: white;
+  border-radius: 1px;
+}
+
+.aac-player__volume-slider {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+  z-index: 10;
+}
+
+.aac-player__volume-text {
+  text-align: center;
+  color: #ccc;
+  font-size: 10px;
+  line-height: 1.1;
+  margin-top: -2px;
+}
+
+.aac-player__volume-text span {
+  font-size: 13px;
+  color: var(--text-color);
+}
