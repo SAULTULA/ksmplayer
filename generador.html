@@ -234,6 +234,14 @@
             <p style="color: #888; margin-top: 0;">Llena los datos de tu emisora y genera el reproductor para tu sitio web al instante.</p>
             
             <div class="input-group">
+                <label>Diseño del Reproductor *</label>
+                <select id="inTheme" onchange="generar()" style="background: rgba(0, 0, 0, 0.5); border: 1px solid #333; padding: 15px; border-radius: 8px; color: #fff; font-family: 'Oswald', sans-serif; font-size: 16px; outline: none; cursor: pointer;">
+                    <option value="index.html">Edición Guitarra (Premium)</option>
+                    <option value="radio.html">Edición Clásica (Neon)</option>
+                </select>
+            </div>
+
+            <div class="input-group">
                 <label>URL del Stream (Obligatorio) *</label>
                 <input type="text" id="inStream" placeholder="ej: https://stream.zeno.fm/tu_radio" value="">
             </div>
@@ -298,9 +306,10 @@
             if (tw) params.append('tw', tw);
             if (mail) params.append('mail', mail);
 
+            const theme = document.getElementById('inTheme').value;
+
             // IMPORTANTE: Cambiar "saultula.github.io/ksmplayer" por la ruta real en producción
-            // Usamos ruta absoluta a GitHub para que el iframe generado le sirva al usuario final
-            const baseUrl = "https://saultula.github.io/ksmplayer/index.html";
+            const baseUrl = "https://saultula.github.io/ksmplayer/" + theme;
             const fullUrl = baseUrl + "?" + params.toString();
 
             // Código para el textarea (para que lo copie el cliente)
@@ -314,9 +323,8 @@
 
             document.getElementById('outCode').value = iframeCode;
 
-            // Actualizar vista previa usando el index.html local para testing, 
-            // pero le pasamos los parámetros reales
-            const localUrl = "index.html?" + params.toString();
+            // Actualizar vista previa usando el archivo seleccionado local para testing
+            const localUrl = theme + "?" + params.toString();
             document.getElementById('previewFrame').src = localUrl;
         }
 

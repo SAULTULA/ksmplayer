@@ -10,6 +10,34 @@ document.addEventListener('DOMContentLoaded', () => {
     const volValueText = document.getElementById('volValue');
     const clockElement = document.getElementById('clock');
 
+    // --- LEER PARÁMETROS DE LA URL ---
+    const urlParams = new URLSearchParams(window.location.search);
+    const streamFromParam = urlParams.get('stream');
+    const logoFromParam = urlParams.get('logo');
+    const fbFromParam = urlParams.get('fb');
+    const twFromParam = urlParams.get('tw');
+    const mailFromParam = urlParams.get('mail');
+
+    if (streamFromParam) {
+        audio.querySelector('source').src = streamFromParam;
+        audio.load();
+    }
+
+    const logoImg = document.querySelector('.aac-player__logo');
+    if (logoFromParam && logoImg) {
+        logoImg.src = logoFromParam;
+        logoImg.style.display = 'block';
+    }
+
+    const fbBtn = document.querySelector('.aac-player__social-btn--fb');
+    const twBtn = document.querySelector('.aac-player__social-btn--tw');
+    const mailBtn = document.querySelector('.aac-player__social-btn--em');
+
+    if (fbFromParam && fbBtn) fbBtn.href = fbFromParam;
+    if (twFromParam && twBtn) twBtn.href = twFromParam;
+    if (mailFromParam && mailBtn) mailBtn.href = "mailto:" + mailFromParam;
+    // --- FIN LECTURA PARÁMETROS ---
+
     let isPlaying = false;
 
     // Reloj digital continuo
