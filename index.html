@@ -10,13 +10,28 @@
 </head>
 <body class="guitar-stage">
 
+    <!-- Efectos Atmosféricos de Escenario -->
+    <div class="stage-fog"></div>
+    <div class="spotlight spotlight-left"></div>
+    <div class="spotlight spotlight-right"></div>
+
     <article class="guitar-player">
         
+        <!-- Luces neón dinámicas detrás de la guitarra para iluminar los huecos transparentes -->
+        <div class="neon-backlights">
+            <div class="orb orb-1"></div>
+            <div class="orb orb-2"></div>
+            <div class="orb orb-3"></div>
+        </div>
+
         <!-- Cuerpo de madera de la guitarra (Sunburst) -->
         <div class="guitar-body">
             
-            <!-- Logo pegado como una calcomanía en la madera -->
-            <img src="./hits.png" alt="Logo" class="guitar-logo" onerror="this.style.display='none'">
+            <!-- Contenedor del Logo con Placeholder -->
+            <div class="logo-container">
+                <div id="logoPlaceholder" class="logo-placeholder">TU LOGO<br>AQUÍ</div>
+                <img src="" alt="Logo" id="stationLogo" class="guitar-logo" onerror="this.style.display='none'">
+            </div>
             
             <div id="statusText" class="guitar-status">OFFLINE</div>
             
@@ -59,9 +74,9 @@
 
         </div>
 
-        <!-- Reproductor de Audio Oculto -->
-    <audio id="audioElement">
-        <source src="https://stream.zeno.fm/k9ksf0kn2nhvv" type="audio/mpeg">
+        <!-- Audio Oculto -->
+    <audio id="radioAudio" crossorigin="anonymous">
+        <source src="" type="audio/mpeg">
     </audio>
     </article>
 

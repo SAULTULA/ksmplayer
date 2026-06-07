@@ -10,13 +10,28 @@
 </head>
 <body class="guitar-stage">
 
+    <!-- Efectos Atmosféricos de Escenario -->
+    <div class="stage-fog"></div>
+    <div class="spotlight spotlight-left"></div>
+    <div class="spotlight spotlight-right"></div>
+
     <article class="guitar-player">
         
+        <!-- Luces neón dinámicas detrás de la guitarra para iluminar los huecos transparentes -->
+        <div class="neon-backlights">
+            <div class="orb orb-1"></div>
+            <div class="orb orb-2"></div>
+            <div class="orb orb-3"></div>
+        </div>
+
         <!-- Cuerpo de madera de la guitarra (Sunburst) -->
         <div class="guitar-body">
             
-            <!-- Logo pegado como una calcomanía en la madera -->
-            <img src="./hits.png" alt="Logo" class="guitar-logo" onerror="this.style.display='none'">
+            <!-- Contenedor del Logo con Placeholder -->
+            <div class="logo-container">
+                <div id="logoPlaceholder" class="logo-placeholder">TU LOGO<br>AQUÍ</div>
+                <img src="" alt="Logo" id="stationLogo" class="guitar-logo" style="display:none;" onerror="this.style.display='none'">
+            </div>
             
             <div id="statusText" class="guitar-status">OFFLINE</div>
             
@@ -24,26 +39,26 @@
             <button id="editModeBtn" class="edit-mode-btn"><i class="bi bi-arrows-move"></i> Modo Edición</button>
 
             <!-- Contenedor del Vúmetro Transparente 1 -->
-            <div id="dragVumeter1" class="guitar-pickup-transparent draggable-item" style="top: 30%; left: 40%; transform: rotate(-10deg); width: 300px; height: 100px;" data-spacing-left="12" data-spacing-right="12" data-vibr-force="2">
+            <div id="dragVumeter1" class="guitar-pickup-transparent draggable-item" style="top: -20.68%; left: 52.36%; transform: rotate(-19deg); width: 300px; height: 96px;" data-spacing-left="12" data-spacing-right="12" data-vibr-force="0.1">
                 <canvas id="vumeter1" class="pickup-vumeter"></canvas>
             </div>
             <!-- Contenedor del Vúmetro Transparente 2 -->
-            <div id="dragVumeter2" class="guitar-pickup-transparent draggable-item" style="top: 40%; left: 40%; transform: rotate(-10deg); width: 300px; height: 100px;" data-spacing-left="12" data-spacing-right="12" data-vibr-force="2">
+            <div id="dragVumeter2" class="guitar-pickup-transparent draggable-item" style="top: -12.88%; left: 52.99%; transform: rotate(-19deg); width: 300px; height: 96px;" data-spacing-left="12" data-spacing-right="12" data-vibr-force="2">
                 <canvas id="vumeter2" class="pickup-vumeter"></canvas>
             </div>
             <!-- Contenedor del Vúmetro Transparente 3 -->
-            <div id="dragVumeter3" class="guitar-pickup-transparent draggable-item" style="top: 50%; left: 40%; transform: rotate(-10deg); width: 300px; height: 100px;" data-spacing-left="12" data-spacing-right="12" data-vibr-force="2">
+            <div id="dragVumeter3" class="guitar-pickup-transparent draggable-item" style="top: -5.6%; left: 55.45%; transform: rotate(-19deg); width: 300px; height: 96px;" data-spacing-left="12" data-spacing-right="12" data-vibr-force="2">
                 <canvas id="vumeter3" class="pickup-vumeter"></canvas>
             </div>
 
             <!-- Botón Power -->
-            <button id="playSwitch" class="absolute-power-btn draggable-item" style="top: 55%; left: 20%;">
+            <button id="playSwitch" class="absolute-power-btn draggable-item" style="top: 67.81%; left: 25.46%;">
                 <span class="control-label text-neon">INICIAR</span>
                 <i class="bi bi-power"></i>
             </button>
 
             <!-- Potenciómetro interactivo sobre la perilla original de la guitarra -->
-            <div id="dragVol" class="absolute-vol-knob draggable-item" style="bottom: 20%; right: 35%;">
+            <div id="dragVol" class="absolute-vol-knob draggable-item" style="top: 80.04%; left: 36.35%;">
                 <span class="control-label text-neon">VOLUMEN</span>
                 <div class="pot-knob-container glow-neon">
                     <div id="volKnob" class="potentiometer-knob"></div>
@@ -52,7 +67,7 @@
             </div>
 
             <!-- Redes sociales incrustadas en el cuerpo -->
-            <div id="dragSocials" class="guitar-socials draggable-item" style="top: 15%; left: 75%;">
+            <div id="dragSocials" class="guitar-socials draggable-item" style="top: 85.07%; left: 74.36%;">
                 <a href="http://www.facebook.com/tu facebook" target="_blank" class="social-btn"><i class="bi bi-facebook"></i></a>
                 <a href="http://www.twitter.com/tu twitter" target="_blank" class="social-btn"><i class="bi bi-twitter"></i></a>
                 <a href="mailto:tu correo electronico" class="social-btn"><i class="bi bi-envelope-fill"></i></a>
@@ -108,10 +123,11 @@
         <!-- URL del Stream -->
         <div style="margin-bottom: 20px; border-bottom: 1px dashed #0f0; padding-bottom: 15px;">
             <label style="display: block; margin-bottom: 6px; font-weight: bold; font-size: 14px;">URL del Stream</label>
-            <div style="display: flex; gap: 8px;">
-                <input type="text" id="streamUrlInput" placeholder="https://stream.zeno.fm/..." value="https://stream.zeno.fm/mfer4shs398uv"
-                    style="flex: 1; background: #111; color: #0f0; border: 1px solid #0f0; padding: 6px 10px; font-family: monospace; font-size: 12px; border-radius: 4px; outline: none;">
-                <button id="applyStreamUrl" style="background: #0f0; color: #000; border: none; padding: 6px 12px; font-weight: bold; cursor: pointer; border-radius: 4px; font-size: 12px;">Aplicar</button>
+            <div class="edit-group">
+                <label>URL del Stream de Audio:</label>
+                <input type="text" id="streamUrlInput" placeholder="https://stream.zeno.fm/..." value=""
+                    style="width: 100%; box-sizing: border-box; background: #000; color: #fff; border: 1px solid #444; padding: 5px; margin-top: 5px;">
+                <button id="applyStreamBtn" style="margin-top: 10px; width: 100%; background: #0088ff; color: #fff; border: none; padding: 5px; cursor: pointer;">Aplicar Stream</button>
             </div>
             <span id="streamStatus" style="font-size: 11px; opacity: 0.7; display: block; margin-top: 4px;">URL guardada en el navegador.</span>
         </div>

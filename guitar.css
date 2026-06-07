@@ -43,15 +43,39 @@ body.guitar-stage {
   border-radius: 50%;
 }
 
-/* Logo como calcomanía */
-.guitar-logo {
+/* Logo Container */
+.logo-container {
   position: absolute;
   top: 30px;
   left: 20px;
-  max-width: 120px;
-  opacity: 1; /* Opacidad al 100% */
+  width: 120px;
+  height: 120px;
   transform: rotate(-15deg);
   z-index: 2;
+}
+
+.logo-placeholder {
+  width: 100%;
+  height: 100%;
+  border: 2px dashed rgba(0, 255, 255, 0.4);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: rgba(0, 255, 255, 0.6);
+  font-size: 14px;
+  font-weight: bold;
+  background: rgba(0,0,0,0.5);
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.8);
+}
+
+/* Logo real */
+.guitar-logo {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: none; /* Oculto por defecto */
 }
 
 /* Status Label (Offline / Online) */
@@ -82,8 +106,8 @@ body.guitar-stage {
 /* Botón Power (Play/Stop) interactivo */
 .absolute-power-btn {
   position: absolute;
-  width: 45px;
-  height: 45px;
+  width: 35px; /* Más pequeño */
+  height: 35px; /* Más pequeño */
   border-radius: 50%;
   background: radial-gradient(circle at 30% 30%, #555, #111);
   border: 2px solid #222;
@@ -93,7 +117,7 @@ body.guitar-stage {
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  font-size: 24px;
+  font-size: 18px; /* Icono más pequeño */
   transition: all 0.2s;
   padding: 0;
   z-index: 10;
@@ -115,8 +139,8 @@ body.guitar-stage {
 /* Potenciómetros (Perillas) */
 .pot-knob-container {
   position: relative;
-  width: 45px;
-  height: 45px;
+  width: 35px; /* Más pequeño */
+  height: 35px; /* Más pequeño */
 }
 .pot-knob {
   width: 40px;
@@ -211,12 +235,12 @@ body.guitar-stage {
 /* Etiquetas y Neón */
 .control-label {
   position: absolute;
-  top: -25px;
+  top: -20px;
   left: 50%;
   transform: translateX(-50%);
   color: #fff;
   font-family: Arial, sans-serif;
-  font-size: inherit; /* Hereda del padre (para edición) */
+  font-size: 11px; /* Letra más pequeña */
   font-weight: bold;
   pointer-events: none;
   white-space: nowrap;
@@ -293,4 +317,118 @@ body.guitar-stage {
   margin: 10px 0 0 0;
   background: #000;
   padding: 10px;
+}
+
+/* --- AMBIENTE DE ESCENARIO DE ROCK (LUCES Y NIEBLA) --- */
+body.guitar-stage {
+  overflow: hidden; /* Evita barras de desplazamiento por las luces */
+  position: relative;
+}
+
+.stage-fog {
+  position: absolute;
+  top: -50%; left: -50%; width: 200%; height: 200%;
+  pointer-events: none;
+  background: 
+    radial-gradient(circle at 50% 50%, rgba(255,255,255,0.03) 0%, transparent 60%),
+    radial-gradient(circle at 30% 70%, rgba(255,255,255,0.02) 0%, transparent 50%);
+  filter: blur(20px);
+  z-index: 10; /* Delante de la guitarra */
+  animation: fogDrift 20s infinite alternate ease-in-out;
+}
+
+@keyframes fogDrift {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(5%, 5%) scale(1.1); }
+}
+
+.spotlight {
+  position: absolute;
+  top: -20%;
+  width: 40vw;
+  height: 150vh;
+  pointer-events: none;
+  z-index: 11; /* Delante de la guitarra y la niebla */
+  mix-blend-mode: screen;
+  border-radius: 50%;
+  filter: blur(40px);
+}
+
+.spotlight-left {
+  left: -10%;
+  background: radial-gradient(ellipse at top, rgba(0, 255, 255, 0.15) 0%, transparent 70%);
+  transform-origin: top center;
+  animation: swingLeft 8s infinite alternate ease-in-out;
+}
+
+.spotlight-right {
+  right: -10%;
+  background: radial-gradient(ellipse at top, rgba(255, 0, 255, 0.15) 0%, transparent 70%);
+  transform-origin: top center;
+  animation: swingRight 10s infinite alternate ease-in-out;
+}
+
+@keyframes swingLeft {
+  0% { transform: rotate(-15deg); }
+  100% { transform: rotate(15deg); }
+}
+
+@keyframes swingRight {
+  0% { transform: rotate(15deg); }
+  100% { transform: rotate(-15deg); }
+}
+
+.guitar-player {
+  z-index: 5; /* Asegura que la guitarra esté encima de las luces de fondo */
+}
+
+/* --- LUCES NEÓN DETRÁS DE LOS AGUJEROS TRANSPARENTES DE LA GUITARRA --- */
+.neon-backlights {
+  position: absolute;
+  top: 0; left: 0; 
+  width: 100%; height: 100%;
+  z-index: -1; /* Totalmente detrás de la madera de la guitarra */
+  overflow: hidden;
+  border-radius: 40px; /* Igual que el cuerpo de la guitarra */
+}
+
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(40px);
+  mix-blend-mode: screen;
+  opacity: 0.8;
+}
+
+.orb-1 {
+  width: 350px; height: 350px;
+  background: #00ffff; /* Neón celeste */
+  animation: orbMove1 8s infinite alternate ease-in-out;
+}
+
+.orb-2 {
+  width: 300px; height: 300px;
+  background: #ff00ff; /* Neón magenta */
+  animation: orbMove2 10s infinite alternate-reverse ease-in-out;
+}
+
+.orb-3 {
+  width: 250px; height: 250px;
+  background: #ffaa00; /* Neón dorado/naranja */
+  animation: orbMove3 12s infinite alternate ease-in-out;
+}
+
+@keyframes orbMove1 {
+  0% { top: -10%; left: -10%; transform: scale(1); }
+  100% { top: 60%; left: 80%; transform: scale(1.2); }
+}
+
+@keyframes orbMove2 {
+  0% { top: 80%; left: -20%; transform: scale(1); }
+  100% { top: -20%; left: 70%; transform: scale(1.1); }
+}
+
+@keyframes orbMove3 {
+  0% { top: 50%; left: 50%; transform: scale(1); }
+  100% { top: 10%; left: 10%; transform: scale(1.5); }
 }

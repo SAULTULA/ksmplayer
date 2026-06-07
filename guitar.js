@@ -271,9 +271,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Buscar si la URL viene por parámetro en el Iframe (ej: ?stream=https://...)
     const urlParams = new URLSearchParams(window.location.search);
     const streamFromParam = urlParams.get('stream');
-    
-    // Prioridad: 1. Parámetro de la URL, 2. Guardado en caché, 3. Por defecto
-    window.currentStreamUrl = streamFromParam || localStorage.getItem('radioStreamUrl') || 'https://stream.zeno.fm/mfer4shs398uv';
+    window.currentStreamUrl = streamFromParam || localStorage.getItem('radioStreamUrl') || '';
 
     if (streamFromParam) {
         streamUrlInput.value = streamFromParam;
@@ -285,9 +283,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Buscar si el Logo viene por parámetro en el Iframe (ej: ?logo=https://...)
     const logoFromParam = urlParams.get('logo');
-    const stationLogoImg = document.querySelector('.guitar-logo');
-    if (logoFromParam && stationLogoImg) {
-        stationLogoImg.src = logoFromParam;
+    const fbFromParam = urlParams.get('fb');
+    const twFromParam = urlParams.get('tw');
+    const mailFromParam = urlParams.get('mail');
+
+    if (streamFromParam) {
+        window.currentStreamUrl = streamFromParam;
+        if (streamUrlInput) streamUrlInput.value = streamFromParam;
+    }
+
+    if (logoFromParam) {
+        const stationLogoImg = document.querySelector('.guitar-logo');
+        if (stationLogoImg) {
+            stationLogoImg.src = logoFromParam;
+            stationLogoImg.style.display = 'block';
+        }
+    }
+
+    const socialsContainer = document.getElementById('dragSocials');
+    if (socialsContainer) {
+        const socialLinks = socialsContainer.querySelectorAll('.social-btn');
+        if (socialLinks.length >= 3) {
+            if (fbFromParam) socialLinks[0].href = fbFromParam;
+            if (twFromParam) socialLinks[1].href = twFromParam;
+            if (mailFromParam) socialLinks[2].href = `mailto:${mailFromParam}`;
+        }
     }
 
     if (applyStreamUrl) {

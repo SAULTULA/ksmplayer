@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KSM Player - Generador de Widgets</title>
+    <!-- Usar el favicon si existe -->
+    <link rel="icon" href="ksm.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #0f0f11;
+            background-image: radial-gradient(circle at top right, #1a1a24 0%, #0a0a0f 100%);
+            color: #fff;
+            font-family: 'Oswald', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .dashboard-container {
+            width: 90%;
+            max-width: 1200px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            background: rgba(20, 20, 25, 0.7);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8), inset 0 1px 1px rgba(255,255,255,0.1);
+            margin: 40px 0;
+        }
+
+        .header {
+            grid-column: 1 / -1;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 20px;
+            margin-bottom: 10px;
+        }
+
+        .header img {
+            height: 60px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.2);
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            background: linear-gradient(90deg, #00ffff, #ff00ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+        }
+
+        .form-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .input-group label {
+            font-size: 1.1rem;
+            color: #aaa;
+            letter-spacing: 1px;
+        }
+
+        .input-group input {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid #333;
+            padding: 15px;
+            border-radius: 8px;
+            color: #fff;
+            font-family: monospace;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #00ffff;
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.2);
+        }
+
+        .generate-btn {
+            background: linear-gradient(135deg, #00ffff, #0088ff);
+            color: #000;
+            border: none;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+            box-shadow: 0 5px 15px rgba(0, 255, 255, 0.3);
+        }
+
+        .generate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 255, 255, 0.5);
+        }
+
+        .output-panel {
+            background: #050505;
+            border: 1px solid #222;
+            border-radius: 8px;
+            padding: 15px;
+            position: relative;
+        }
+
+        .output-panel textarea {
+            width: 100%;
+            height: 120px;
+            background: transparent;
+            border: none;
+            color: #0f0;
+            font-family: monospace;
+            resize: none;
+            font-size: 13px;
+        }
+
+        .output-panel textarea:focus {
+            outline: none;
+        }
+
+        .preview-panel {
+            display: flex;
+            flex-direction: column;
+            background: #000;
+            border-radius: 15px;
+            overflow: hidden;
+            border: 2px solid #333;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.9);
+        }
+
+        .preview-header {
+            background: #111;
+            padding: 10px 20px;
+            font-size: 1rem;
+            color: #888;
+            border-bottom: 1px solid #222;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .preview-header span.badge {
+            background: rgba(0, 255, 255, 0.1);
+            color: #00ffff;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
+
+        .preview-content {
+            flex-grow: 1;
+            min-height: 500px;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        @media (max-width: 900px) {
+            .dashboard-container {
+                grid-template-columns: 1fr;
+            }
+            .preview-content {
+                min-height: 400px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="dashboard-container">
+        <div class="header">
+            <img src="ksm.png" alt="KSM Logo" onerror="this.style.display='none'">
+            <h1>KSM PLAYER <span style="color:#fff; font-size:1.5rem; opacity:0.5;">| Generador</span></h1>
+        </div>
+
+        <div class="form-panel">
+            <p style="color: #888; margin-top: 0;">Llena los datos de tu emisora y genera el reproductor para tu sitio web al instante.</p>
+            
+            <div class="input-group">
+                <label>URL del Stream (Obligatorio) *</label>
+                <input type="text" id="inStream" placeholder="ej: https://stream.zeno.fm/tu_radio" value="">
+            </div>
+
+            <div class="input-group">
+                <label>URL de tu Logo (Opcional)</label>
+                <input type="text" id="inLogo" placeholder="ej: https://tudominio.com/logo.png">
+            </div>
+
+            <div class="input-group">
+                <label>Tu Facebook (Opcional)</label>
+                <input type="text" id="inFb" placeholder="ej: https://facebook.com/turadio">
+            </div>
+
+            <div class="input-group">
+                <label>Tu Twitter/X (Opcional)</label>
+                <input type="text" id="inTw" placeholder="ej: https://twitter.com/turadio">
+            </div>
+
+            <div class="input-group">
+                <label>Tu Correo Electrónico (Opcional)</label>
+                <input type="email" id="inMail" placeholder="ej: contacto@turadio.com">
+            </div>
+
+            <button class="generate-btn" onclick="generar()">VISUALIZAR Y GENERAR CÓDIGO</button>
+
+            <div class="output-panel">
+                <div style="position: absolute; top: -10px; left: 15px; background: #050505; padding: 0 10px; color: #888; font-size: 12px;">Código para incrustar</div>
+                <textarea id="outCode" readonly placeholder="El código aparecerá aquí..."></textarea>
+            </div>
+        </div>
+
+        <div class="preview-panel">
+            <div class="preview-header">
+                VISTA PREVIA EN VIVO
+                <span class="badge">Live</span>
+            </div>
+            <div class="preview-content">
+                <iframe id="previewFrame" src="index.html"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function generar() {
+            const stream = document.getElementById('inStream').value.trim();
+            const logo = document.getElementById('inLogo').value.trim();
+            const fb = document.getElementById('inFb').value.trim();
+            const tw = document.getElementById('inTw').value.trim();
+            const mail = document.getElementById('inMail').value.trim();
+
+            if (!stream) {
+                alert("La URL del Stream es obligatoria.");
+                return;
+            }
+
+            // Construir los parámetros
+            const params = new URLSearchParams();
+            params.append('stream', stream);
+            if (logo) params.append('logo', logo);
+            if (fb) params.append('fb', fb);
+            if (tw) params.append('tw', tw);
+            if (mail) params.append('mail', mail);
+
+            // IMPORTANTE: Cambiar "saultula.github.io/ksmplayer" por la ruta real en producción
+            // Usamos ruta absoluta a GitHub para que el iframe generado le sirva al usuario final
+            const baseUrl = "https://saultula.github.io/ksmplayer/";
+            const fullUrl = baseUrl + "?" + params.toString();
+
+            // Código para el textarea (para que lo copie el cliente)
+            const iframeCode = `<iframe 
+    src="${fullUrl}" 
+    width="100%" 
+    height="700" 
+    style="border: none; overflow: hidden; border-radius: 15px;" 
+    allow="autoplay">
+</iframe>`;
+
+            document.getElementById('outCode').value = iframeCode;
+
+            // Actualizar vista previa usando el index.html local para testing, 
+            // pero le pasamos los parámetros reales
+            const localUrl = "index.html?" + params.toString();
+            document.getElementById('previewFrame').src = localUrl;
+        }
+
+        // Auto-generar al abrir para mostrar algo
+        window.onload = generar;
+    </script>
+</body>
+</html>
